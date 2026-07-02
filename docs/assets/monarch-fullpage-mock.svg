@@ -1,0 +1,200 @@
+<svg viewBox="0 0 1200 1500" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="14" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+    <linearGradient id="tealFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16b3ac" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#16b3ac" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="tealFill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="redFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ef4444" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ef4444" stop-opacity="0.16"/>
+    </linearGradient>
+  </defs>
+
+  <!-- page background -->
+  <rect x="0" y="0" width="1200" height="1500" fill="#f5f6f8"/>
+
+  <!-- ===== breadcrumb ===== -->
+  <text x="32" y="46" fill="#8a94a6" font-size="17" font-weight="500">Accounts</text>
+  <path d="M118,38 L124,44 L118,50" fill="none" stroke="#c3cad6" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="146" cy="44" r="11" fill="#1e3a5f"/>
+  <text x="146" y="48" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">EF</text>
+  <text x="166" y="50" fill="#1a1f29" font-size="19" font-weight="700">Evergreen Checking (Household)</text>
+  <rect x="978" y="26" width="88" height="34" rx="8" fill="#ffffff" stroke="#e2e6ec"/>
+  <text x="1008" y="48" fill="#1a1f29" font-size="14" font-weight="500">Edit</text>
+  <path d="M1046,40 l5,5 l5,-5" fill="none" stroke="#8a94a6" stroke-width="1.6" stroke-linecap="round"/>
+  <rect x="1074" y="26" width="94" height="34" rx="8" fill="#ffffff" stroke="#e2e6ec"/>
+  <text x="1104" y="48" fill="#1a1f29" font-size="14" font-weight="500">Filters</text>
+  <path d="M1148,40 l5,5 l5,-5" fill="none" stroke="#8a94a6" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- ===== Card A: Current Balance ===== -->
+  <rect x="32" y="76" width="1136" height="440" rx="16" fill="#ffffff" stroke="#edf0f3" filter="url(#cardShadow)"/>
+  <text x="64" y="118" fill="#8a94a6" font-size="12" font-weight="700" letter-spacing="0.8">CURRENT BALANCE</text>
+  <text x="64" y="158" fill="#1a1f29" font-size="34" font-weight="700" letter-spacing="-0.5">$2,847.15</text>
+  <path d="M256,146 l7,10 l7,-10 Z" fill="#ef4444"/>
+  <text x="278" y="156" fill="#ef4444" font-size="15" font-weight="600">-$418.20 (-12.8%)</text>
+  <text x="452" y="156" fill="#8a94a6" font-size="15">1 month change</text>
+  <rect x="1020" y="100" width="116" height="34" rx="8" fill="#ffffff" stroke="#e2e6ec"/>
+  <text x="1040" y="122" fill="#1a1f29" font-size="14">1 month</text>
+  <path d="M1118,114 l5,5 l5,-5" fill="none" stroke="#8a94a6" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- y grid + labels -->
+  <line x1="140" y1="214" x2="1130" y2="214" stroke="#f1f4f7"/>
+  <line x1="140" y1="286" x2="1130" y2="286" stroke="#f1f4f7"/>
+  <line x1="140" y1="358" x2="1130" y2="358" stroke="#f1f4f7"/>
+  <line x1="140" y1="430" x2="1130" y2="430" stroke="#f1f4f7"/>
+  <g fill="#98a2b3" font-size="12" text-anchor="end">
+    <text x="128" y="218">$3.4K</text>
+    <text x="128" y="290">$3.0K</text>
+    <text x="128" y="362">$2.7K</text>
+    <text x="128" y="434">$2.4K</text>
+  </g>
+  <!-- current balance line -->
+  <path d="M150,258 L240,270 L330,262 L420,300 L510,332 L600,352 L690,372 L780,356 L840,300 L900,266 L1000,300 L1120,292 L1120,430 L150,430 Z" fill="url(#tealFill)"/>
+  <path d="M150,258 L240,270 L330,262 L420,300 L510,332 L600,352 L690,372 L780,356 L840,300 L900,266 L1000,300 L1120,292"
+        fill="none" stroke="#16b3ac" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- x labels -->
+  <g fill="#98a2b3" font-size="12" text-anchor="middle">
+    <text x="150" y="456">Jun 2</text>
+    <text x="288" y="456">Jun 6</text>
+    <text x="426" y="456">Jun 10</text>
+    <text x="564" y="456">Jun 14</text>
+    <text x="702" y="456">Jun 18</text>
+    <text x="840" y="456">Jun 22</text>
+    <text x="978" y="456">Jun 26</text>
+    <text x="1116" y="456">Jul 2</text>
+  </g>
+  <!-- left nav arrow -->
+  <circle cx="32" cy="323" r="17" fill="#ffffff" stroke="#e5e7eb"/>
+  <path d="M36,316 L29,323 L36,330" fill="none" stroke="#8a94a6" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- ===== Card B: Projected Balance (the extension) ===== -->
+  <rect x="32" y="532" width="1136" height="512" rx="16" fill="#ffffff" stroke="#edf0f3" filter="url(#cardShadow)"/>
+  <text x="64" y="574" fill="#8a94a6" font-size="12" font-weight="700" letter-spacing="0.8">PROJECTED BALANCE</text>
+  <text x="64" y="614" fill="#1a1f29" font-size="34" font-weight="700" letter-spacing="-0.5">$3,104.60</text>
+  <path d="M300,616 l7,-10 l7,10 Z" fill="#16a34a"/>
+  <text x="322" y="612" fill="#16a34a" font-size="15" font-weight="600">+$257.45 projected</text>
+  <text x="64" y="642" fill="#8a94a6" font-size="14">8 recurring &#183; low point </text>
+  <text x="266" y="642" fill="#ef4444" font-size="14" font-weight="600">-$312 on Jul 24, 2026</text>
+  <rect x="1004" y="556" width="132" height="34" rx="8" fill="#ffffff" stroke="#e2e6ec"/>
+  <text x="1024" y="578" fill="#1a1f29" font-size="14">3 months</text>
+  <path d="M1118,570 l5,5 l5,-5" fill="none" stroke="#8a94a6" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- zero baseline -->
+  <line x1="64" y1="820" x2="1136" y2="820" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/>
+  <text x="56" y="824" fill="#98a2b3" font-size="12" text-anchor="end">$0</text>
+  <!-- area fills -->
+  <path d="M64,742 L140,758 L220,748 L300,786 L360,808 L410,822 L64,822 Z" fill="url(#tealFill2)"/>
+  <path d="M410,822 L440,836 L470,834 L500,820 Z" fill="url(#redFill)"/>
+  <path d="M500,820 L560,792 L650,762 L760,745 L820,715 L900,742 L930,720 L1010,700 L1104,690 L1104,820 L500,820 Z" fill="url(#tealFill2)"/>
+  <!-- projected line: healthy -->
+  <path d="M64,742 L140,758 L220,748 L300,786 L360,808 L410,822"
+        fill="none" stroke="#14b8a6" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- projected line: dip (red) -->
+  <path d="M410,822 L440,836 L470,834 L500,820"
+        fill="none" stroke="#ef4444" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- projected line: recovery -->
+  <path d="M500,820 L560,792 L650,762 L760,745 L820,715 L900,742 L930,720 L1010,700 L1104,690"
+        fill="none" stroke="#14b8a6" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- low-point callout -->
+  <rect x="352" y="672" width="196" height="30" rx="15" fill="#fee2e2" stroke="#fecaca"/>
+  <text x="450" y="692" fill="#b91c1c" font-size="13" font-weight="600" text-anchor="middle">Low -$312 &#183; Jul 24</text>
+  <line x1="450" y1="702" x2="440" y2="830" stroke="#fca5a5" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="440" cy="836" r="6" fill="#ef4444" stroke="#ffffff" stroke-width="3"/>
+  <!-- month labels -->
+  <g fill="#b8c0cc" font-size="12" text-anchor="middle">
+    <text x="180" y="846">Jul</text>
+    <text x="440" y="862">Aug</text>
+    <text x="700" y="862">Sep</text>
+    <text x="1000" y="862">Oct</text>
+  </g>
+  <!-- divider -->
+  <line x1="64" y1="892" x2="1136" y2="892" stroke="#eef2f7"/>
+  <!-- pending header -->
+  <text x="64" y="920" fill="#8a94a6" font-size="12" font-weight="700" letter-spacing="1">PENDING TRANSACTIONS</text>
+  <rect x="1050" y="904" width="86" height="30" rx="15" fill="#ffffff" stroke="#14b8a6"/>
+  <text x="1093" y="923" fill="#14b8a6" font-size="13" font-weight="600" text-anchor="middle">+ Add</text>
+  <!-- pending row 1 -->
+  <circle cx="72" cy="958" r="4" fill="#ef4444"/>
+  <text x="88" y="963" fill="#1a1f29" font-size="15" font-weight="600">Rent</text>
+  <text x="88" y="982" fill="#98a2b3" font-size="12">Due Jul 24 &#183; check #2041</text>
+  <text x="1136" y="967" fill="#1a1f29" font-size="15" font-weight="600" text-anchor="end">-$1,800.00</text>
+  <!-- pending row 2 -->
+  <circle cx="72" cy="1008" r="4" fill="#16a34a"/>
+  <text x="88" y="1013" fill="#1a1f29" font-size="15" font-weight="600">Paycheck</text>
+  <text x="88" y="1032" fill="#98a2b3" font-size="12">Expected Jul 25</text>
+  <text x="1136" y="1017" fill="#16a34a" font-size="15" font-weight="600" text-anchor="end">+$3,200.00</text>
+
+  <!-- ===== Card C: Transactions ===== -->
+  <rect x="32" y="1060" width="740" height="412" rx="16" fill="#ffffff" stroke="#edf0f3" filter="url(#cardShadow)"/>
+  <text x="64" y="1100" fill="#1a1f29" font-size="20" font-weight="700">Transactions</text>
+  <rect x="404" y="1082" width="122" height="32" rx="8" fill="#ffffff" stroke="#e2e6ec"/>
+  <text x="465" y="1103" fill="#1a1f29" font-size="13" text-anchor="middle">Edit multiple</text>
+  <rect x="534" y="1082" width="134" height="32" rx="8" fill="#f2683c"/>
+  <text x="601" y="1103" fill="#ffffff" font-size="13" font-weight="600" text-anchor="middle">Add transaction</text>
+  <rect x="676" y="1082" width="96" height="32" rx="8" fill="#ffffff" stroke="#e2e6ec"/>
+  <text x="724" y="1103" fill="#1a1f29" font-size="13" text-anchor="middle">Columns</text>
+
+  <!-- group: July 1 -->
+  <rect x="48" y="1126" width="708" height="28" fill="#f8fafc"/>
+  <text x="64" y="1145" fill="#6b7280" font-size="12" font-weight="600">July 1, 2026</text>
+  <text x="748" y="1145" fill="#6b7280" font-size="12" font-weight="600" text-anchor="end">-$64.20</text>
+  <circle cx="72" cy="1182" r="5" fill="#f59e0b"/>
+  <text x="90" y="1179" fill="#1a1f29" font-size="15" font-weight="500">Evergreen Fuel &amp; Go</text>
+  <text x="90" y="1197" fill="#98a2b3" font-size="12">Gas</text>
+  <text x="748" y="1187" fill="#1a1f29" font-size="15" font-weight="600" text-anchor="end">-$64.20</text>
+
+  <!-- group: June 30 -->
+  <rect x="48" y="1212" width="708" height="28" fill="#f8fafc"/>
+  <text x="64" y="1231" fill="#6b7280" font-size="12" font-weight="600">June 30, 2026</text>
+  <text x="748" y="1231" fill="#6b7280" font-size="12" font-weight="600" text-anchor="end">+$3,200.00</text>
+  <circle cx="72" cy="1268" r="5" fill="#16a34a"/>
+  <text x="90" y="1265" fill="#1a1f29" font-size="15" font-weight="500">Northstar Payroll</text>
+  <text x="90" y="1283" fill="#98a2b3" font-size="12">Paycheck</text>
+  <text x="748" y="1273" fill="#16a34a" font-size="15" font-weight="600" text-anchor="end">+$3,200.00</text>
+
+  <!-- group: June 28 -->
+  <rect x="48" y="1298" width="708" height="28" fill="#f8fafc"/>
+  <text x="64" y="1317" fill="#6b7280" font-size="12" font-weight="600">June 28, 2026</text>
+  <text x="748" y="1317" fill="#6b7280" font-size="12" font-weight="600" text-anchor="end">-$142.86</text>
+  <circle cx="72" cy="1354" r="5" fill="#8b5cf6"/>
+  <text x="90" y="1351" fill="#1a1f29" font-size="15" font-weight="500">Granite Market</text>
+  <text x="90" y="1369" fill="#98a2b3" font-size="12">Groceries</text>
+  <text x="748" y="1359" fill="#1a1f29" font-size="15" font-weight="600" text-anchor="end">-$142.86</text>
+
+  <!-- group: June 25 -->
+  <rect x="48" y="1384" width="708" height="28" fill="#f8fafc"/>
+  <text x="64" y="1403" fill="#6b7280" font-size="12" font-weight="600">June 25, 2026</text>
+  <text x="748" y="1403" fill="#6b7280" font-size="12" font-weight="600" text-anchor="end">-$1,800.00</text>
+  <circle cx="72" cy="1440" r="5" fill="#ef4444"/>
+  <text x="90" y="1437" fill="#1a1f29" font-size="15" font-weight="500">Cedar Ridge Property Mgmt</text>
+  <text x="90" y="1455" fill="#98a2b3" font-size="12">Rent &#183; check #2041</text>
+  <text x="748" y="1447" fill="#1a1f29" font-size="15" font-weight="600" text-anchor="end">-$1,800.00</text>
+
+  <!-- ===== Card D: Summary ===== -->
+  <rect x="792" y="1060" width="376" height="236" rx="16" fill="#ffffff" stroke="#edf0f3" filter="url(#cardShadow)"/>
+  <text x="820" y="1100" fill="#1a1f29" font-size="20" font-weight="700">Summary</text>
+  <text x="820" y="1146" fill="#8a94a6" font-size="14">Institution</text>
+  <text x="1140" y="1146" fill="#16b3ac" font-size="14" font-weight="500" text-anchor="end">Evergreen Federal CU</text>
+  <line x1="820" y1="1164" x2="1140" y2="1164" stroke="#f1f4f7"/>
+  <text x="820" y="1190" fill="#8a94a6" font-size="14">Account type</text>
+  <text x="1140" y="1190" fill="#1a1f29" font-size="14" text-anchor="end">Checking</text>
+  <line x1="820" y1="1208" x2="1140" y2="1208" stroke="#f1f4f7"/>
+  <text x="820" y="1234" fill="#8a94a6" font-size="14">Owner</text>
+  <text x="1140" y="1234" fill="#1a1f29" font-size="14" text-anchor="end">Shared</text>
+  <line x1="820" y1="1252" x2="1140" y2="1252" stroke="#f1f4f7"/>
+  <text x="820" y="1278" fill="#8a94a6" font-size="14">Total transactions</text>
+  <text x="1140" y="1278" fill="#1a1f29" font-size="14" text-anchor="end">1,204</text>
+
+  <!-- ===== Card E: Connection status ===== -->
+  <rect x="792" y="1312" width="376" height="120" rx="16" fill="#ffffff" stroke="#edf0f3" filter="url(#cardShadow)"/>
+  <text x="820" y="1352" fill="#1a1f29" font-size="16" font-weight="700">Connection status</text>
+  <text x="1140" y="1352" fill="#8a94a6" font-size="18" font-weight="700" text-anchor="end">&#183;&#183;&#183;</text>
+  <circle cx="826" cy="1388" r="5" fill="#16a34a"/>
+  <text x="842" y="1393" fill="#1a1f29" font-size="14" font-weight="500">Connected</text>
+  <text x="842" y="1414" fill="#98a2b3" font-size="12">Last synced 2 hours ago</text>
+</svg>

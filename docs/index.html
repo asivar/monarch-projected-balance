@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projected Balance for Monarch Money — see your balance before it happens</title>
+<meta name="description" content="Unofficial browser extension that adds a forward-looking, day-by-day projected-balance graph, a pending-transactions register, and a confidence-gated reconciler to Monarch Money account pages. Everything stays in your browser.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icon32.png">
+<link rel="apple-touch-icon" href="assets/icon128.png">
+<meta property="og:title" content="Projected Balance for Monarch Money">
+<meta property="og:description" content="See your Monarch balance before it happens. Day-by-day projection, pending-transactions register, and a confidence-gated reconciler — all local, no server.">
+<meta property="og:image" content="https://asivar.github.io/monarch-projected-balance/assets/monarch-fullpage-mock.png">
+<meta property="og:url" content="https://asivar.github.io/monarch-projected-balance/">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    --teal: #14b8a6;
+    --teal-dark: #0f9488;
+    --teal-tint: #ecfdf9;
+    --red: #ef4444;
+    --red-tint: #fef2f2;
+    --green: #16a34a;
+    --green-tint: #f0fdf4;
+    --ink: #1a1f29;
+    --ink-soft: #4b5563;
+    --ink-faint: #8a94a6;
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --line: #e2e6ec;
+    --radius: 16px;
+    --shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--teal-dark); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ===== nav ===== */
+  nav {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 10;
+  }
+  .nav-inner {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 24px; max-width: 1080px; margin: 0 auto;
+  }
+  .nav-inner img { width: 28px; height: 28px; border-radius: 6px; }
+  .nav-name { font-weight: 700; font-size: 15px; letter-spacing: -0.2px; }
+  .nav-name .unofficial {
+    font-size: 11px; font-weight: 600; color: var(--ink-faint);
+    border: 1px solid var(--line); border-radius: 999px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 2px; white-space: nowrap;
+  }
+  .nav-links { margin-left: auto; display: flex; gap: 20px; font-size: 14px; font-weight: 500; }
+  .nav-links a { color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--teal-dark); text-decoration: none; }
+
+  /* ===== hero ===== */
+  header { padding: 72px 0 32px; text-align: center; }
+  .eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 600;
+    color: var(--teal-dark); background: var(--teal-tint);
+    border: 1px solid #c6f0e8; border-radius: 999px; padding: 4px 14px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: clamp(32px, 5.5vw, 52px);
+    font-weight: 800; letter-spacing: -1.2px; line-height: 1.12;
+    max-width: 720px; margin: 0 auto 18px;
+  }
+  h1 .accent { color: var(--teal); }
+  .tagline {
+    font-size: clamp(16px, 2.2vw, 19px); color: var(--ink-soft);
+    max-width: 640px; margin: 0 auto 32px;
+  }
+  .cta-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 15px; font-weight: 600; border-radius: 12px;
+    padding: 13px 26px; transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary {
+    background: var(--teal); color: #fff;
+    box-shadow: 0 4px 14px rgba(20, 184, 166, 0.35);
+  }
+  .btn-primary:hover { background: var(--teal-dark); }
+  .btn-secondary {
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--line); box-shadow: var(--shadow);
+  }
+  .cta-note { font-size: 13px; color: var(--ink-faint); }
+  /* an "Add to Chrome" button can slot in later as .btn-primary — see placeholder in the hero markup */
+
+  .hero-shot { padding: 40px 0 8px; }
+  .hero-frame {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 20px; box-shadow: 0 20px 60px rgba(15, 23, 42, 0.1);
+    padding: 10px; max-width: 920px; margin: 0 auto; overflow: hidden;
+  }
+  .hero-frame img { display: block; width: 100%; height: auto; border-radius: 12px; }
+  .hero-caption { font-size: 13px; color: var(--ink-faint); margin-top: 14px; }
+
+  /* ===== sections ===== */
+  section { padding: 72px 0; }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 48px; }
+  h2 { font-size: clamp(26px, 3.5vw, 34px); font-weight: 800; letter-spacing: -0.7px; margin-bottom: 12px; }
+  .section-head p { color: var(--ink-soft); font-size: 16px; }
+
+  /* ===== features ===== */
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .feature {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 30px 28px;
+  }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+  }
+  .icon-teal { background: var(--teal-tint); }
+  .icon-red { background: var(--red-tint); }
+  .icon-green { background: var(--green-tint); }
+  .feature h3 { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 10px; }
+  .feature p { font-size: 14.5px; color: var(--ink-soft); }
+  .feature p + p { margin-top: 10px; }
+  .pill {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    border-radius: 999px; padding: 2px 10px; margin-top: 14px;
+  }
+  .pill-red { color: var(--red); background: var(--red-tint); }
+  .pill-teal { color: var(--teal-dark); background: var(--teal-tint); }
+  .pill-green { color: var(--green); background: var(--green-tint); }
+
+  /* ===== install ===== */
+  #install { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .code-block {
+    display: flex; align-items: center; gap: 12px;
+    background: #0f172a; color: #e2e8f0;
+    border-radius: 12px; padding: 14px 16px 14px 20px;
+    max-width: 640px; margin: 0 auto 48px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13.5px; overflow-x: auto;
+  }
+  .code-block code { flex: 1; white-space: nowrap; }
+  .code-block .dollar { color: #64748b; user-select: none; }
+  .copy-btn {
+    flex-shrink: 0; background: #1e293b; color: #94a3b8;
+    border: 1px solid #334155; border-radius: 8px;
+    font-size: 12.5px; font-weight: 600; padding: 6px 12px;
+    cursor: pointer; font-family: inherit; transition: color 0.15s, border-color 0.15s;
+  }
+  .copy-btn:hover { color: #e2e8f0; border-color: #64748b; }
+  .copy-btn.copied { color: #34d399; border-color: #34d399; }
+  .install-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 880px; margin: 0 auto; }
+  .install-card {
+    background: var(--bg); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 28px;
+  }
+  .install-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 16px; }
+  .install-card ol { padding-left: 20px; font-size: 14.5px; color: var(--ink-soft); }
+  .install-card li { margin-bottom: 10px; }
+  .install-card li:last-child { margin-bottom: 0; }
+  .install-card code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; background: #e9edf2; color: var(--ink);
+    border-radius: 5px; padding: 1px 6px; white-space: nowrap;
+  }
+  .install-note {
+    font-size: 13px; color: var(--ink-faint);
+    border-top: 1px solid var(--line); margin-top: 18px; padding-top: 14px;
+  }
+
+  /* ===== privacy ===== */
+  .privacy-card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    max-width: 760px; margin: 0 auto; padding: 40px;
+  }
+  .privacy-card ul { list-style: none; margin-top: 20px; }
+  .privacy-card li {
+    display: flex; gap: 14px; align-items: flex-start;
+    font-size: 15px; color: var(--ink-soft); margin-bottom: 16px;
+  }
+  .privacy-card li:last-child { margin-bottom: 0; }
+  .privacy-card li strong { color: var(--ink); }
+  .check {
+    flex-shrink: 0; width: 22px; height: 22px; margin-top: 2px;
+    border-radius: 50%; background: var(--green-tint);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ===== footer ===== */
+  footer { padding: 48px 0 56px; text-align: center; }
+  .disclaimer {
+    font-size: 13px; color: var(--ink-faint);
+    max-width: 640px; margin: 0 auto 20px;
+  }
+  .footer-links { display: flex; gap: 24px; justify-content: center; font-size: 14px; font-weight: 500; }
+
+  /* ===== responsive ===== */
+  @media (max-width: 860px) {
+    .features { grid-template-columns: 1fr; }
+    .install-cols { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    header { padding: 48px 0 20px; }
+    section { padding: 52px 0; }
+    .nav-links a.gh-label { display: none; }
+    .nav-name .unofficial { display: none; }
+    .btn { width: 100%; justify-content: center; }
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .privacy-card { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <img src="assets/icon32.png" alt="" width="28" height="28">
+    <span class="nav-name">Projected Balance <span class="unofficial">Unofficial</span></span>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#privacy">Privacy</a>
+      <a class="gh-label" href="https://github.com/asivar/monarch-projected-balance">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<header class="wrap">
+  <span class="eyebrow">Unofficial browser extension for Monarch Money</span>
+  <h1>See your Monarch balance <span class="accent">before it happens.</span></h1>
+  <p class="tagline">A forward-looking, day-by-day balance projection for any account —
+  so you know whether that check clears <em>before</em> payday, not after. Plus a pending-transactions
+  register and a reconciler that quietly cleans up after itself.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="https://github.com/asivar/monarch-projected-balance">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.5 7.5 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      View on GitHub
+    </a>
+    <a class="btn btn-secondary" href="https://github.com/asivar/monarch-projected-balance/archive/refs/heads/main.zip">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download
+    </a>
+    <!--
+      Web Store placeholder: when the extension is published to the Chrome Web Store,
+      drop an "Add to Chrome" button here as the primary CTA, e.g.
+      <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/EXTENSION_ID">Add to Chrome</a>
+      and demote "View on GitHub" to btn-secondary.
+    -->
+  </div>
+  <p class="cta-note">Free &amp; open source (MIT) · installs in about a minute via <a href="#install">Load&nbsp;unpacked</a></p>
+
+  <div class="hero-shot">
+    <div class="hero-frame">
+      <img src="assets/monarch-fullpage-mock.svg" alt="A Monarch Money account page showing the extension's projected-balance graph flagging a below-zero low point of -$312 on Jul 24, with a pending-transactions register below it. All data shown is fictional." width="1200" height="1500">
+    </div>
+    <p class="hero-caption">The extension in context on an account page. All data shown is fictional.</p>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What it does</h2>
+      <p>Three things Monarch doesn't do natively, added right beneath the Current Balance graph on any account page.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon icon-teal">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4v14a2 2 0 0 0 2 2h16"/><path d="M6 13l4-4 3.5 3L18 7.5" stroke="#14b8a6"/><path d="M18 7.5l3 8" stroke="#ef4444"/></svg>
+        </div>
+        <h3>Projected balance graph</h3>
+        <p>A day-by-day projection of a single account's balance, built from Monarch's recurring items and your future-dated transactions. Hover any day to see the payees and amounts driving each change.</p>
+        <p>If the projection dips below zero, the line turns red and the exact date is flagged — so "will this check survive until payday?" gets a real answer.</p>
+        <span class="pill pill-red">⚠ Flags the day you'd go negative</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon icon-teal">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg>
+        </div>
+        <h3>Pending transactions register</h3>
+        <p>Wrote a check? Committed to a transfer? Log it the moment it happens — before the bank sees it. It rides the projection as a committed outflow (or inflow) until it clears.</p>
+        <p>No more mental math about money that's spent but not yet posted.</p>
+        <span class="pill pill-teal">Stored in your browser only</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon icon-green">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3>Confidence-gated reconciler</h3>
+        <p>When a posted transaction matches a pending item exactly — same check number, same amount — it clears silently. A plausible amount-and-date match asks you to confirm. Anything uncertain is left alone.</p>
+        <p>This dissolves the duplicate problem you'd get from entering future transactions directly in Monarch.</p>
+        <span class="pill pill-green">✓ Auto-clears only when it's sure</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Install</h2>
+      <p>Not yet on the Chrome Web Store — it loads as an unpacked extension in about a minute. Download the ZIP above, or clone:</p>
+    </div>
+    <div class="code-block">
+      <span class="dollar">$</span>
+      <code id="clone-cmd">git clone https://github.com/asivar/monarch-projected-balance.git</code>
+      <button class="copy-btn" onclick="copyClone(this)" aria-label="Copy git clone command">Copy</button>
+    </div>
+    <div class="install-cols">
+      <div class="install-card">
+        <h3>Chrome / Edge / Brave</h3>
+        <ol>
+          <li>Download or clone this repo (and unzip it, if downloaded).</li>
+          <li>Go to <code>chrome://extensions</code> and enable <strong>Developer mode</strong> (top right).</li>
+          <li>Click <strong>Load unpacked</strong> and select the folder.</li>
+          <li>Open Monarch and visit any account page. Click the toolbar icon for info and <strong>Settings</strong>.</li>
+        </ol>
+      </div>
+      <div class="install-card">
+        <h3>Firefox</h3>
+        <ol>
+          <li>Go to <code>about:debugging#/runtime/this-firefox</code>.</li>
+          <li>Click <strong>Load Temporary Add-on…</strong> and select <code>manifest.json</code>.</li>
+          <li>Open Monarch and visit any account page.</li>
+        </ol>
+        <p class="install-note">Firefox temporary add-ons unload on restart; a permanent install requires signing via addons.mozilla.org. The code is identical either way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Privacy</h2>
+      <p>This page also serves as the extension's privacy policy.</p>
+    </div>
+    <div class="privacy-card">
+      <ul>
+        <li>
+          <span class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Everything runs locally in your browser</strong>, against Monarch's own in-page data. There is no server, no analytics, and no tracking.</span>
+        </li>
+        <li>
+          <span class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>Your pending-items register is stored via the browser's storage</strong> — your choice of <strong>synced</strong> (across your own browsers, via the browser vendor's account sync) or <strong>local only</strong> (never leaves the machine).</span>
+        </li>
+        <li>
+          <span class="check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span><strong>No data is ever sent to the author or any third party.</strong> The extension requests only the <code style="font-family: ui-monospace, Menlo, monospace; font-size: 13px;">storage</code> permission and runs only on Monarch's site.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p class="disclaimer">
+    <strong>Unofficial.</strong> Not affiliated with, endorsed by, or sponsored by Monarch Money.
+    "Monarch" and "Monarch Money" are trademarks of their respective owner, used here only to
+    describe compatibility. This independent, community-built tool relies on undocumented
+    interfaces of the Monarch web app and may stop working at any time. Provided "as is",
+    without warranty of any kind.
+  </p>
+  <div class="footer-links">
+    <a href="https://github.com/asivar/monarch-projected-balance">GitHub</a>
+    <a href="https://github.com/asivar/monarch-projected-balance/blob/main/LICENSE">MIT License</a>
+    <a href="#privacy">Privacy</a>
+  </div>
+</footer>
+
+<script>
+function copyClone(btn) {
+  var cmd = document.getElementById('clone-cmd').textContent;
+  function done() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function () {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 1800);
+  }
+  function fallback() {
+    var range = document.createRange();
+    range.selectNodeContents(document.getElementById('clone-cmd'));
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    document.execCommand('copy');
+    sel.removeAllRanges();
+    done();
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(cmd).then(done).catch(fallback);
+  } else {
+    fallback();
+  }
+}
+</script>
+
+</body>
+</html>
