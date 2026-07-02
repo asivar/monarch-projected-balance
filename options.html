@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Projected Balance — Settings</title>
+  <style>
+    body { font: 14px/1.5 -apple-system, system-ui, sans-serif; color: #1f2937; max-width: 620px; margin: 32px auto; padding: 0 20px; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    .sub { color: #6b7280; margin: 0 0 24px; }
+    fieldset { border: 1px solid #e5e7eb; border-radius: 10px; padding: 16px 18px; margin: 0 0 18px; }
+    legend { font-weight: 600; padding: 0 6px; }
+    label.opt { display: block; padding: 8px 0; cursor: pointer; }
+    label.opt input { margin-right: 8px; }
+    .hint { color: #6b7280; font-size: 12px; margin: 2px 0 0 24px; }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+    button { padding: 7px 14px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; font-size: 13px; cursor: pointer; }
+    button.primary { background: #1a6b5f; color: #fff; border-color: #1a6b5f; }
+    #status { color: #1a8f5a; font-size: 13px; margin-left: 8px; }
+    code { background: #f3f4f6; padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Projected Balance — Settings</h1>
+  <p class="sub">Where your pending-transactions register is stored.</p>
+
+  <fieldset>
+    <legend>Storage</legend>
+    <label class="opt"><input type="radio" name="backend" value="sync"> Sync across my browsers</label>
+    <div class="hint">Uses the browser's built-in sync (Chrome: your Google account; Firefox: your Firefox account). Convenient, but your pending items travel through the browser vendor's sync. Small capacity — fine for a handful of items.</div>
+    <label class="opt"><input type="radio" name="backend" value="local"> Local only (this browser)</label>
+    <div class="hint">Nothing leaves this machine. Survives reloads, but won't appear on your other devices, and is erased if you clear the extension's data.</div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Backup &amp; restore</legend>
+    <p class="hint" style="margin-left:0">Export a JSON copy of your register (drop it in Dropbox/iCloud/OneDrive manually if you like), or import one back.</p>
+    <div class="row">
+      <button id="export">Export JSON</button>
+      <button id="import">Import JSON…</button>
+      <input id="file" type="file" accept="application/json" style="display:none">
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Advanced</legend>
+    <label class="opt"><input type="checkbox" id="debug"> Verbose console logging (<code>[ProjBal]</code>)</label>
+  </fieldset>
+
+  <div class="row">
+    <button class="primary" id="save">Save</button>
+    <span id="status"></span>
+  </div>
+  <p class="hint" style="margin-left:0;margin-top:16px">After changing storage, reload your Monarch tab to apply. Switching backends copies your current register to the new location.</p>
+
+  <script src="options.js"></script>
+</body>
+</html>

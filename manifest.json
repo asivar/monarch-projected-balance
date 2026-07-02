@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Projected Balance for Monarch Money",
+  "version": "1.0.0",
+  "description": "Unofficial. Adds a projected-balance graph, an outstanding-items register, and a confidence-gated reconciler to Monarch Money account pages. Your data stays in your browser (synced or local, your choice) and is never sent anywhere. Not affiliated with Monarch Money.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://app.monarch.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://app.monarch.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["page.js"],
+      "matches": ["https://app.monarch.com/*"]
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Projected Balance for Monarch Money",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "projected-balance@monarch-tools.dev",
+      "strict_min_version": "121.0"
+    }
+  }
+}
