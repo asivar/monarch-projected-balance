@@ -2,8 +2,8 @@
 (function () {
   'use strict';
   const api = (typeof browser !== 'undefined') ? browser : chrome;
-  // Update this to your repository URL after you create it.
-  const REPO = 'https://github.com/asivar/monarch-projected-balance';
+  // Landing page (GitHub Pages); links back to the repo from there.
+  const REPO = 'https://asivar.github.io/monarch-projected-balance/';
 
   document.getElementById('settings').addEventListener('click', () => {
     if (api.runtime.openOptionsPage) api.runtime.openOptionsPage();
