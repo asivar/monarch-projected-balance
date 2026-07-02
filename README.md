@@ -21,6 +21,26 @@ It adds three things to any Monarch account page, right beneath the Current bala
   you to confirm; anything uncertain is left alone. This dissolves the duplicate problem you
   get from entering a future transaction directly in Monarch.
 
+## Screenshots
+
+> A demo account with **fabricated data** — this is what the extension adds to a Monarch Money account page.
+
+<p align="center">
+  <img src="docs/assets/monarch-fullpage-mock.png"
+       alt="Projected Balance for Monarch Money: a projected-balance graph, an outstanding-items register, and a reconciler added to a Monarch account page"
+       width="820">
+</p>
+
+The **Projected Balance** card (center) projects the account forward day by day. Here it flags that the balance will dip to **-$312 on Jul 24** — before payday — a warning Monarch can't surface natively. Directly below, the **Pending Transactions** register is tracking a rent check and an incoming paycheck that haven't posted yet; both ride the projection until they clear, and the reconciler removes them automatically once matching transactions appear.
+
+<!--
+Path note: this references docs/assets/monarch-fullpage-mock.png.
+If you keep the mock somewhere else in the repo, update the src above to match.
+GitHub reliably renders PNG in README image tags; the .svg version
+(monarch-fullpage-mock.svg) is crisper for the landing page but may be
+sanitized in README rendering, so the PNG is used here.
+-->
+
 ## Privacy
 
 Everything runs locally in your browser against Monarch's own in-page data. **No data is
